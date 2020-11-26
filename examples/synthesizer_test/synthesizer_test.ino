@@ -1,14 +1,4 @@
-
-#include "types.h"
-#include "timer.h"
-#include "waveform.h"
-#include "oscillator.h"
-#include "command_parser.h"
-#include "sequencer.h"
-#include "notes.h"
-#include "mixer.h"
-#include "dac_mcp4725.h"
-#include "util.h"
+#include "synth.h"
 
 namespace note = synth::notes::voltage;
 
@@ -37,15 +27,11 @@ synth::SignalSourcePtr source_list[] = {
 synth::DacMcp4725 dac;
 synth::Timer timer;
 
-
-
 static synth::voltage_t g_value = synth::millivolts(0);
 static bool g_trace = false;
 static Print& g_logger = Serial;
 static synth::SignalSourcePtr g_source = mixer0.Output();
 static uint32_t g_loopcnt = 0;
-
-
 
 
 static const synth::CommandParserResponse::Status kResultOk = 0;
@@ -188,8 +174,6 @@ static void CommandCallback(const synth::CommandParserRequest& request, synth::C
   response.ReplyStatus(status);
 }
 
-
-
 synth::CommandParser cmd(Serial, &CommandCallback);
 
 void setup() {
@@ -205,8 +189,6 @@ void loop() {
   cmd.Step(delta_t);
 
   synth::Graph::Instance().Step(delta_t);
-
-
 
   synth::voltage_t value = (g_source != synth::SignalSourcePtrNull) ? g_source->Value() : g_value;
   
