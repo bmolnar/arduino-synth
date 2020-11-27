@@ -1,4 +1,4 @@
-#include "synth.h"
+#include <synth.h>
 
 namespace note = synth::notes::voltage;
 
@@ -178,7 +178,6 @@ synth::CommandParser cmd(Serial, &CommandCallback);
 
 void setup() {
   Serial.begin(9600);
-  //dac.begin(0x60);
   dac.Begin();
   timer.Start();
 }

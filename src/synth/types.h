@@ -57,6 +57,9 @@ static inline voltage_t volts(int16_t value)
 {
   return static_cast<voltage_t>(1000 * value);
 }
+static const voltage_t kVoltageMin = -32768;
+static const voltage_t kVoltageMax = 32767;
+
 
 // Gain
 typedef int16_t gain_t;

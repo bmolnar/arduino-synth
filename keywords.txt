@@ -1,1 +1,35 @@
+#######################################
+# Syntax Coloring Map MusicPlayer_v1_8
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+Oscillator	KEYWORD1
+Sequencer	KEYWORD1
+Mixer	KEYWORD1
+Timer	KEYWORD1
+Dac	KEYWORD1
+SignalSource	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+Step	KEYWORD2
+Value	KEYWORD2
+Output	KEYWORD2
+
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+WaveformZero	LITERAL1
+WaveformSine	LITERAL1
+WaveformTriangle	LITERAL1
+WaveformSawtooth	LITERAL1
+WaveformSquare	LITERAL1
+
+
+
 
