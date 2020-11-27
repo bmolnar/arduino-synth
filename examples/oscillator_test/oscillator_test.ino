@@ -1,7 +1,7 @@
 #include <synth.h>
 
-synth::Oscillator osc(synth::WaveformSine, synth::milliseconds(1000), synth::millivolts(1000), synth::millivolts(2000));
-synth::DacPrint dac(Serial, synth::milliseconds(2000));
+synth::Oscillator osc(synth::WaveformSine, synth::milliseconds(6000), synth::millivolts(2000), synth::millivolts(2000));
+synth::DacPrint dac(Serial, synth::milliseconds(1000));
 
 synth::Timer timer;
 
