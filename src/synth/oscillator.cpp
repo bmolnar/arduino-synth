@@ -22,25 +22,36 @@ void Oscillator::SetOffset(voltage_t offset)
 {
   offset_ = offset;
 }
-void Oscillator::Step(duration_t delta_t)
+
+void Oscillator::StepPre(duration_t delta_t)
+{
+  ((void) delta_t);
+}
+void Oscillator::StepPost(duration_t delta_t)
 {
   phase_ += static_cast<uint16_t>(delta_t * 65536 / period_);
 }
+
+
+void Oscillator::StepToPre(timestamp_t timestamp)
+{
+  phase_ += static_cast<uint16_t>((timestamp - timestamp_) * 65536 / period_);
+}
+void Oscillator::StepToPost(timestamp_t timestamp)
+{
+  ((void) timestamp);
+}
+
 voltage_t Oscillator::Value()
 {
   return static_cast<voltage_t>(static_cast<int32_t>(offset_) + (static_cast<int32_t>(amplitude_) * static_cast<int32_t>((*waveform_)(phase_))) / 32767);
 }
-SignalSourcePtr Oscillator::Output()
+SignalSource& Oscillator::Output()
 {
-  return &output_;
+  return output_;
 }
 
-
-void OscillatorSignalSource::Step(duration_t delta_t)
-{
-  osc_->Step(delta_t);
-}
-voltage_t OscillatorSignalSource::Value()
+voltage_t OscillatorValueGetter::Get()
 {
   return osc_->Value();
 }

@@ -22,8 +22,15 @@ class DacPrint : public Dac
 {
 public:
   DacPrint(Print& print, duration_t flush_period=milliseconds(1000));
+  DacPrint(Print& print, SignalSource& source, duration_t flush_period=milliseconds(1000));
   virtual void Begin();
-  virtual void Step(duration_t delta_t);
+
+  virtual void StepPre(duration_t delta_t);
+  virtual void StepPost(duration_t delta_t);
+
+  virtual void StepToPre(timestamp_t timestamp);
+  virtual void StepToPost(timestamp_t timestamp);
+
   virtual void SetVoltage(voltage_t voltage);
 
 protected:

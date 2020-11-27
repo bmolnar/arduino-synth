@@ -9,16 +9,15 @@ namespace synth {
 class Mixer;
 typedef Mixer* MixerPtr;
 
-class MixerSignalSource : public SignalSource
+class MixerValueGetter : public SignalGetter
 {
 public:
-  MixerSignalSource(MixerPtr mixer) : mixer_(mixer) {}
-
-  void Step(duration_t delta_t);
-  voltage_t Value();
+  MixerValueGetter(MixerPtr mixer) : mixer_(mixer) {}
+  virtual voltage_t Get();
 protected:
   MixerPtr mixer_;
 };
+
 
 class Mixer : public GraphObject<Mixer>
 {
@@ -26,32 +25,49 @@ public:
   static const uint8_t kMaxChannels = 8;
 
   Mixer();
-  Mixer(SignalSourcePtr input0);
-  Mixer(SignalSourcePtr input0, SignalSourcePtr input1);
-  Mixer(SignalSourcePtr input0, SignalSourcePtr input1, SignalSourcePtr input2);
-  Mixer(SignalSourcePtr input0, SignalSourcePtr input1, SignalSourcePtr input2, SignalSourcePtr input3);
-  Mixer(SignalSourcePtr input0, SignalSourcePtr input1, SignalSourcePtr input2, SignalSourcePtr input3,
-        SignalSourcePtr input4);
-  Mixer(SignalSourcePtr input0, SignalSourcePtr input1, SignalSourcePtr input2, SignalSourcePtr input3,
-        SignalSourcePtr input4, SignalSourcePtr input5);
-  Mixer(SignalSourcePtr input0, SignalSourcePtr input1, SignalSourcePtr input2, SignalSourcePtr input3,
-        SignalSourcePtr input4, SignalSourcePtr input5, SignalSourcePtr input6);
-  Mixer(SignalSourcePtr input0, SignalSourcePtr input1, SignalSourcePtr input2, SignalSourcePtr input3,
-        SignalSourcePtr input4, SignalSourcePtr input5, SignalSourcePtr input6, SignalSourcePtr input7);
+  Mixer(SignalSource& input0);
+  Mixer(SignalSource& input0, SignalSource& input1);
+  Mixer(SignalSource& input0, SignalSource& input1, SignalSource& input2);
+  Mixer(SignalSource& input0, SignalSource& input1, SignalSource& input2, SignalSource& input3);
+  Mixer(SignalSource& input0, SignalSource& input1, SignalSource& input2, SignalSource& input3,
+        SignalSource& input4);
+  Mixer(SignalSource& input0, SignalSource& input1, SignalSource& input2, SignalSource& input3,
+        SignalSource& input4, SignalSource& input5);
+  Mixer(SignalSource& input0, SignalSource& input1, SignalSource& input2, SignalSource& input3,
+        SignalSource& input4, SignalSource& input5, SignalSource& input6);
+  Mixer(SignalSource& input0, SignalSource& input1, SignalSource& input2, SignalSource& input3,
+        SignalSource& input4, SignalSource& input5, SignalSource& input6, SignalSource& input7);
 
-  void SetChannelInput(uint8_t channel, SignalSourcePtr input);
+  void SetChannelInput(uint8_t channel, SignalSource& input);
   void SetChannelGain(uint8_t channel, gain_t gain);
-  void Step(duration_t delta_t);
+
+  void StepPre(duration_t delta_t);
+  void StepPost(duration_t delta_t);
+
+  void StepToPre(timestamp_t timestamp);
+  void StepToPost(timestamp_t timestamp);
+
   voltage_t Value();
 
-  SignalSourcePtr Output();
+  SignalSink& Input(uint8_t channel);
+  SignalSource& Output();
+
+#if GRAPH_UTILS
+  uint8_t GetNumChildren();
+  GraphObjectBasePtr GetChild(uint8_t index);
+#endif
 
 protected:
+/*
   SignalSourcePtr input_[kMaxChannels]{ SignalSourcePtrNull, SignalSourcePtrNull, SignalSourcePtrNull, SignalSourcePtrNull,
                                         SignalSourcePtrNull, SignalSourcePtrNull, SignalSourcePtrNull, SignalSourcePtrNull};
+*/
   gain_t gain_[kMaxChannels]{kGainUnity, kGainUnity, kGainUnity, kGainUnity, kGainUnity, kGainUnity, kGainUnity, kGainUnity};
+  MixerValueGetter getter_{this};
 
-  MixerSignalSource output_{this};
+  SignalSink input_[kMaxChannels]{SignalSink{*this}, SignalSink{*this}, SignalSink{*this}, SignalSink{*this},
+                                  SignalSink{*this}, SignalSink{*this}, SignalSink{*this}, SignalSink{*this}};
+  SignalSource output_{*this, &getter_};
 };
 
 

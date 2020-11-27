@@ -20,6 +20,9 @@ static inline duration_t seconds(uint32_t value)
   return static_cast<duration_t>(1000000 * value);
 }
 
+typedef duration_t timestamp_t;
+
+
 // Duty
 typedef uint8_t duty_t;
 static const duty_t kDutyFull = 255;
@@ -70,17 +73,6 @@ static const gain_t kGainUnity = 4096;
 typedef norm_t (*NormalizedPeriodicFunction)(phase_t);
 typedef NormalizedPeriodicFunction PeriodicFunction;
 typedef NormalizedPeriodicFunction NormalizedWaveform;
-
-
-// SignalSource
-class SignalSource
-{
-public:
-  virtual void Step(duration_t delta_t) = 0;
-  virtual voltage_t Value() = 0;
-};
-typedef SignalSource* SignalSourcePtr;
-static const SignalSourcePtr SignalSourcePtrNull = nullptr;
 
 
 } // namespace synth

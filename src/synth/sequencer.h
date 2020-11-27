@@ -9,17 +9,26 @@ namespace synth {
 class Sequencer;
 typedef Sequencer* SequencerPtr;
 
-class SequencerSignalSource : public SignalSource
+typedef voltage_t (*SequencerSlotFunction)(uint8_t);
+
+
+class SequencerValueGetter : public SignalGetter
 {
 public:
-  SequencerSignalSource(SequencerPtr seq) : seq_(seq) {}
-  void Step(duration_t delta_t);
-  voltage_t Value();
+  SequencerValueGetter(SequencerPtr seq) : seq_(seq) {}
+  virtual voltage_t Get();
+protected:
+  SequencerPtr seq_;
+};
+class SequencerGateGetter : public SignalGetter
+{
+public:
+  SequencerGateGetter(SequencerPtr seq) : seq_(seq) {}
+  virtual voltage_t Get();
 protected:
   SequencerPtr seq_;
 };
 
-typedef voltage_t (*SequencerSlotFunction)(uint8_t);
 
 class Sequencer : public GraphObject<Sequencer>
 {
@@ -27,10 +36,16 @@ public:
   Sequencer(duration_t step_period, duty_t duty, voltage_t* slots, uint8_t num_slots);
   Sequencer(duration_t step_period, duty_t duty, SequencerSlotFunction slot_func, uint8_t num_slots);
 
-  void Step(duration_t delta_t);
+  void StepPre(duration_t delta_t);
+  void StepPost(duration_t delta_t);
+
+  void StepToPre(timestamp_t timestamp);
+  void StepToPost(timestamp_t timestamp);
+
   voltage_t Value();
-  bool Gate();
-  SignalSourcePtr Output();
+  voltage_t GateValue();
+  SignalSource& Output();
+  SignalSource& GateOutput();
 
 protected:
   duration_t step_period_;
@@ -41,7 +56,11 @@ protected:
   uint8_t cur_slot_ = 0;
   duration_t step_remainder_ = 0;
 
-  SequencerSignalSource output_{this};
+  SequencerValueGetter getter_{this};
+  SequencerGateGetter gate_getter_{this};
+
+  SignalSource output_{*this, &getter_};
+  SignalSource gate_output_{*this, &gate_getter_};
 };
 
 } // namespace synth

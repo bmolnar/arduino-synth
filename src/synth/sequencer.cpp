@@ -11,34 +11,56 @@ Sequencer::Sequencer(duration_t step_period, duty_t duty, SequencerSlotFunction 
 {
 }
 
-void Sequencer::Step(duration_t delta_t)
+
+void Sequencer::StepPre(duration_t delta_t)
+{
+  ((void) delta_t);
+}
+void Sequencer::StepPost(duration_t delta_t)
 {
   duration_t new_remainder = step_remainder_ + delta_t;
   cur_slot_ = (cur_slot_ + static_cast<uint8_t>(new_remainder / step_period_)) % num_slots_;
   step_remainder_ = new_remainder % step_period_;
 }
+
+
+void Sequencer::StepToPre(timestamp_t timestamp)
+{
+  duration_t delta_t = timestamp - timestamp_;
+  duration_t new_remainder = step_remainder_ + delta_t;
+  cur_slot_ = (cur_slot_ + static_cast<uint8_t>(new_remainder / step_period_)) % num_slots_;
+  step_remainder_ = new_remainder % step_period_;
+}
+void Sequencer::StepToPost(timestamp_t timestamp)
+{
+  ((void) timestamp);
+}
+
+
 voltage_t Sequencer::Value()
 {
   return (slots_ != nullptr) ? slots_[cur_slot_] : (*slot_func_)(cur_slot_);
 }
-bool Sequencer::Gate()
+voltage_t Sequencer::GateValue()
 {
-  return step_remainder_ <= (step_period_ * duty_ / 255);
+  return (step_remainder_ <= (step_period_ * duty_ / 255)) ? millivolts(5000) : millivolts(0);
 }
-SignalSourcePtr Sequencer::Output()
+SignalSource& Sequencer::Output()
 {
-  return &output_;
+  return output_;
+}
+SignalSource& Sequencer::GateOutput()
+{
+  return output_;
 }
 
-
-void SequencerSignalSource::Step(duration_t delta_t)
-{
-  seq_->Step(delta_t);
-}
-voltage_t SequencerSignalSource::Value()
+voltage_t SequencerValueGetter::Get()
 {
   return seq_->Value();
 }
-
+voltage_t SequencerGateGetter::Get()
+{
+  return seq_->GateValue();
+}
 
 } // namespace synth

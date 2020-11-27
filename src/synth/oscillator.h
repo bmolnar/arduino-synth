@@ -10,12 +10,11 @@ class Oscillator;
 typedef Oscillator* OscillatorPtr;
 
 
-class OscillatorSignalSource : public SignalSource
+class OscillatorValueGetter : public SignalGetter
 {
 public:
-  OscillatorSignalSource(OscillatorPtr osc) : osc_(osc) {}
-  void Step(duration_t delta_t);
-  voltage_t Value();
+  OscillatorValueGetter(OscillatorPtr osc) : osc_(osc) {}
+  virtual voltage_t Get();
 protected:
   OscillatorPtr osc_;
 };
@@ -29,10 +28,14 @@ public:
   void SetAmplitude(voltage_t amplitude);
   void SetOffset(voltage_t offset);
 
-  void Step(duration_t delta_t);
-  voltage_t Value();
+  void StepPre(duration_t delta_t);
+  void StepPost(duration_t delta_t);
 
-  SignalSourcePtr Output();
+  void StepToPre(timestamp_t timestamp);
+  void StepToPost(timestamp_t timestamp);
+
+  voltage_t Value();
+  SignalSource& Output();
 
 protected:
   NormalizedWaveform waveform_;
@@ -40,10 +43,10 @@ protected:
   voltage_t amplitude_;
   voltage_t offset_;
   uint16_t phase_ = 0;
-  OscillatorSignalSource output_{this};
+
+  OscillatorValueGetter getter_{this};
+  SignalSource output_{*this, &getter_};
 };
-
-
 
 } // namespace synth
 
