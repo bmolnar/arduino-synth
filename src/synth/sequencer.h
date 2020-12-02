@@ -56,6 +56,7 @@ protected:
   uint8_t cur_slot_ = 0;
   duration_t step_remainder_ = 0;
 
+
   SequencerValueGetter getter_{this};
   SequencerGateGetter gate_getter_{this};
 

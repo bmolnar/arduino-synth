@@ -11,6 +11,8 @@ synth::DacPrint dac0(Serial, synth::milliseconds(1000));
 synth::DacMcp4725 dac1;
 synth::DacPrintGraph dac2(Serial, synth::milliseconds(50));
 
+synth::Connection conn(osc0.Output(), dac1.Input());
+
 
 synth::Timer timer;
 
@@ -18,18 +20,16 @@ synth::timestamp_t g_timestamp = 0;
 unsigned long g_loopcnt = 0;
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
   timer.Start();
-
-  dac2.Input().Connect(osc0.Output());
+  dac1.Begin();
 }
 
 void loop() {
   synth::duration_t delta_t = timer.ElapsedSinceLast();
   g_timestamp += delta_t;
 
-  dac2.StepTo(g_timestamp);
-
+  dac1.StepTo(g_timestamp);
   if ((g_loopcnt % 1024) == 0) {
     //PrintGraph(Serial, &dac2);
   }

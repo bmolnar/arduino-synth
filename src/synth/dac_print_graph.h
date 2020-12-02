@@ -22,11 +22,15 @@ public:
 
   virtual void SetVoltage(voltage_t voltage);
   void PrintHoriz(voltage_t value);
+  void PrintSpaces(uint8_t count);
+  void PrintScaleLine();
+
 protected:
   Print& print_;
   duration_t sample_period_;
   duration_t sample_accum_{0};
   voltage_t last_value_;
+  unsigned long printcnt_{0};
 };
 
 } // namespace synth

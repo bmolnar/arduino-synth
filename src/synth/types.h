@@ -7,15 +7,15 @@ namespace synth {
 
 // Duration
 typedef uint32_t duration_t;
-static inline duration_t microseconds(uint32_t value)
+static constexpr duration_t microseconds(uint32_t value)
 {
   return static_cast<duration_t>(value);
 }
-static inline duration_t milliseconds(uint32_t value)
+static constexpr duration_t milliseconds(uint32_t value)
 {
   return static_cast<duration_t>(1000 * value);
 }
-static inline duration_t seconds(uint32_t value)
+static constexpr duration_t seconds(uint32_t value)
 {
   return static_cast<duration_t>(1000000 * value);
 }
@@ -52,11 +52,11 @@ static const int32_t NORM_DIVISOR = 32767;
 
 // Voltage
 typedef int16_t voltage_t;
-static inline voltage_t millivolts(int16_t value)
+static constexpr voltage_t millivolts(int16_t value)
 {
   return static_cast<voltage_t>(value);
 }
-static inline voltage_t volts(int16_t value)
+static constexpr voltage_t volts(int16_t value)
 {
   return static_cast<voltage_t>(1000 * value);
 }

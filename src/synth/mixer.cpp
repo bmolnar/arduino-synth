@@ -132,7 +132,6 @@ void Mixer::StepToPost(timestamp_t timestamp)
 
 voltage_t Mixer::Value()
 {
-  timestamp_t timestamp = Timestamp();
   return static_cast<voltage_t>(
     (
       (input_[0].Connected() ? (static_cast<int32_t>(gain_[0]) * static_cast<int32_t>(input_[0].GetValue())) : static_cast<int32_t>(0)) +

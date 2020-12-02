@@ -22,8 +22,6 @@ void Sequencer::StepPost(duration_t delta_t)
   cur_slot_ = (cur_slot_ + static_cast<uint8_t>(new_remainder / step_period_)) % num_slots_;
   step_remainder_ = new_remainder % step_period_;
 }
-
-
 void Sequencer::StepToPre(timestamp_t timestamp)
 {
   duration_t delta_t = timestamp - timestamp_;
@@ -43,7 +41,8 @@ voltage_t Sequencer::Value()
 }
 voltage_t Sequencer::GateValue()
 {
-  return (step_remainder_ <= (step_period_ * duty_ / 255)) ? millivolts(5000) : millivolts(0);
+  duration_t gate_duration = step_period_ * static_cast<duration_t>(duty_) / 255;
+  return (step_remainder_ <= gate_duration) ? millivolts(5000) : millivolts(0);
 }
 SignalSource& Sequencer::Output()
 {
@@ -51,7 +50,7 @@ SignalSource& Sequencer::Output()
 }
 SignalSource& Sequencer::GateOutput()
 {
-  return output_;
+  return gate_output_;
 }
 
 voltage_t SequencerValueGetter::Get()

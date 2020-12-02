@@ -18,9 +18,30 @@ void DacPrintGraph::Begin()
 }
 
 
+void DacPrintGraph::PrintSpaces(uint8_t spaces)
+{
+  while (spaces-- > 0) {
+    print_.print(" ");
+  }
+}
+
+// [0, 8, 16, 24, 32, 40, 48, 56, 64]
+// [0, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64]
+//
+void DacPrintGraph::PrintScaleLine()
+{
+  print_.println("        4    -    3    -    2    -    1    -    0    -    1    -    2    -    3    -    4");
+
+}
 void DacPrintGraph::PrintHoriz(voltage_t value)
 {
-  int32_t rpos32 = 30 + (30 * static_cast<int32_t>(value) / 4000.0);
+
+  if ((printcnt_++ % 40) == 0) {
+    PrintScaleLine();
+  }
+
+  int32_t rpos32 = 40 + (40 * static_cast<int32_t>(value) / 4000.0);
+
   uint8_t digits =  ((value < 10000) ? ((value < 1000) ? ((value < 100) ? ((value < 10) ? 1 : 2) : 3) : 4) : 5);
   print_.print(value); uint8_t rest = 8 - digits; while (rest-- > 0) { print_.print(" "); };
 
