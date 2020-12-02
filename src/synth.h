@@ -8,6 +8,7 @@
 #include "synth/waveform.h"
 #include "synth/oscillator.h"
 #include "synth/sequencer.h"
+#include "synth/playback.h"
 #include "synth/mixer.h"
 #include "synth/remap.h"
 #include "synth/null_sink.h"

@@ -1,13 +1,13 @@
 #include <synth.h>
 
-namespace note = synth::notes::voltage;
+namespace pitch = synth::pitch::voltage;
 
 synth::Oscillator osc0(synth::WaveformSquare, synth::milliseconds(10000), synth::millivolts(1000), synth::millivolts(1000));
 synth::Oscillator osc1(synth::WaveformSine, synth::milliseconds(5000), synth::millivolts(100), synth::millivolts(100));
 synth::Oscillator osc2(synth::WaveformSine, synth::milliseconds(2000), synth::millivolts(10), synth::millivolts(10));
 synth::Oscillator osc3(synth::WaveformSine, synth::milliseconds(1000), synth::millivolts(1000), synth::millivolts(0));
 
-synth::voltage_t slots0[] = {note::Note_E2, note::Note_G2, note::Note_A2, note::Note_G2, note::Note_D3, note::Note_C3, note::Note_D3, note::Note_E3};
+synth::voltage_t slots0[] = {pitch::Pitch_E2, pitch::Pitch_G2, pitch::Pitch_A2, pitch::Pitch_G2, pitch::Pitch_D3, pitch::Pitch_C3, pitch::Pitch_D3, pitch::Pitch_E3};
 synth::Sequencer seq0(synth::milliseconds(125), synth::kDutyHalf, slots0, 8);
 synth::voltage_t slots1[] = {synth::millivolts(0), synth::millivolts(500), synth::millivolts(1000), synth::millivolts(2000)};
 synth::Sequencer seq1(synth::milliseconds(1000), synth::kDutyHalf, slots1, 4);

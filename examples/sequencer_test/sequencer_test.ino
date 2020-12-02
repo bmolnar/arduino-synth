@@ -1,15 +1,15 @@
 #include <synth.h>
 
-namespace note = synth::notes::voltage;
+namespace pitch = synth::pitch;
 
 synth::voltage_t slots0[] = {
-  note::Note_E2, note::Note_G2, note::Note_A2, note::Note_G2,
-  note::Note_D3, note::Note_C3, note::Note_D3, note::Note_E3
+  ToVoltage(pitch::Pitch_E2), ToVoltage(pitch::Pitch_G2), ToVoltage(pitch::Pitch_A2), ToVoltage(pitch::Pitch_G2),
+  ToVoltage(pitch::Pitch_D3), ToVoltage(pitch::Pitch_C3), ToVoltage(pitch::Pitch_D3), ToVoltage(pitch::Pitch_E3)
 };
 
 synth::voltage_t slots1[] = {
-  note::Note_C3, note::Note_C2, note::Note_C2, note::Note_C3,
-  note::Note_C2, note::Note_C2, note::Note_Bb2, note::Note_C2
+  ToVoltage(pitch::Pitch_C3), ToVoltage(pitch::Pitch_C2), ToVoltage(pitch::Pitch_C2), ToVoltage(pitch::Pitch_C3),
+  ToVoltage(pitch::Pitch_C2), ToVoltage(pitch::Pitch_C2), ToVoltage(pitch::Pitch_Bb2), ToVoltage(pitch::Pitch_C2)
 };
 
 
