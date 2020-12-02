@@ -12,13 +12,11 @@ char* find_char(const char* s, char c)
   }
   return (*p == '\0') ? nullptr : p;
 }
-
 void PrintIndent(Print& print, uint8_t level)
 {
   while (level-- > 0) {
     print.print("  ");
   }
-
 }
 void PrintGraph(Print& print, GraphObjectBasePtr obj, uint8_t level)
 {

@@ -9,14 +9,11 @@ namespace synth {
 class NullSink : public GraphObject<NullSink>
 {
 public:
-  NullSink(SignalSource& source0);
-
-  void StepPre(duration_t delta_t);
-  void StepPost(duration_t delta_t);
-
+  NullSink();
+  NullSink(SignalSource& source);
+  SignalSink& Input();
   void StepToPre(timestamp_t timestamp);
   void StepToPost(timestamp_t timestamp);
-
 
 #if GRAPH_UTILS
   uint8_t GetNumChildren();
@@ -24,7 +21,7 @@ public:
 #endif
 
 protected:
-  SignalSource& source0_;
+  SignalSink input_;
 };
 
 } // namespace synth

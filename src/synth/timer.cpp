@@ -2,20 +2,25 @@
 
 namespace synth {
 
-Timer::Timer()
+Timer::Timer(duration_t period, TimerCallback callback)
+    : period_(period), callback_(callback)
 {
-  last_usec_ = micros();
 }
 void Timer::Start()
 {
-  last_usec_ = micros();
+  last_timestamp_ = micros();
+  accum_ = 0;
 }
-duration_t Timer::ElapsedSinceLast()
+void Timer::StepTo(timestamp_t timestamp)
 {
-  duration_t now = micros();
-  duration_t result = now - last_usec_;
-  last_usec_ = now;
-  return result;
+  accum_ += timestamp - last_timestamp_;
+  last_timestamp_ = timestamp;
+  while (accum_ > period_) {
+    if (callback_ != nullptr) {
+      (*callback_)();
+    }
+    accum_ -= period_;
+  }
 }
 
 } // namespace synth

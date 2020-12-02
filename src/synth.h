@@ -2,6 +2,7 @@
 #define SYNTH__SYNTH_H_
 
 #include "synth/types.h"
+#include "synth/clock.h"
 #include "synth/timer.h"
 #include "synth/notes.h"
 #include "synth/waveform.h"

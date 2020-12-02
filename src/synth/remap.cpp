@@ -2,6 +2,9 @@
 
 namespace synth {
 
+//
+// Remap
+//
 Remap::Remap(const RemapParams& params)
  : params_(params)
 {
@@ -11,30 +14,6 @@ Remap::Remap(const RemapParams& params, SignalSource& input)
 {
   input_.Connect(input);
 }
-
-#if GRAPH_UTILS
-uint8_t Remap::GetNumChildren()
-{
-  return input_.Connected() ? 1 : 0;
-}
-GraphObjectBasePtr Remap::GetChild(uint8_t index)
-{
-  return (input_.Connected() && index == 0) ? &input_.Source()->Owner() : nullptr;
-}
-#endif // GRAPH_UTILS
-
-
-void Remap::StepPre(duration_t delta_t)
-{
-  if (input_.Connected()) {
-    input_.Source()->Owner().Step(delta_t);
-  }
-}
-void Remap::StepPost(duration_t delta_t)
-{
-  ((void) delta_t);
-}
-
 void Remap::StepToPre(timestamp_t timestamp)
 {
   if (input_.Connected()) {
@@ -45,7 +24,6 @@ void Remap::StepToPost(timestamp_t timestamp)
 {
   ((void) timestamp);
 }
-
 voltage_t Remap::Value()
 {
   voltage_t voltage = input_.Connected() ? input_.GetValue() : 0;
@@ -60,6 +38,20 @@ SignalSource& Remap::Output()
   return output_;
 }
 
+#if GRAPH_UTILS
+uint8_t Remap::GetNumChildren()
+{
+  return input_.Connected() ? 1 : 0;
+}
+GraphObjectBasePtr Remap::GetChild(uint8_t index)
+{
+  return (input_.Connected() && index == 0) ? &input_.Source()->Owner() : nullptr;
+}
+#endif // GRAPH_UTILS
+
+//
+// RemapValueGetter
+//
 voltage_t RemapValueGetter::Get()
 {
   return remap_->Value();

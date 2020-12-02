@@ -13,14 +13,10 @@ public:
 
   DigitalOut(int pin);
   ~DigitalOut();
-
   void Begin();
   void SetVoltage(voltage_t voltage);
-  void StepPre(duration_t delta_t);
-  void StepPost(duration_t delta_t);
   void StepToPre(timestamp_t timestamp);
   void StepToPost(timestamp_t timestamp);
-
   SignalSink& Input();
 
 protected:

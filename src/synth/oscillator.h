@@ -13,10 +13,10 @@ typedef Oscillator* OscillatorPtr;
 class OscillatorValueGetter : public SignalGetter
 {
 public:
-  OscillatorValueGetter(OscillatorPtr osc) : osc_(osc) {}
+  OscillatorValueGetter(Oscillator& osc) : osc_(osc) {}
   virtual voltage_t Get();
 protected:
-  OscillatorPtr osc_;
+  Oscillator& osc_;
 };
 
 class Oscillator : public GraphObject<Oscillator>
@@ -28,12 +28,8 @@ public:
   void SetAmplitude(voltage_t amplitude);
   void SetOffset(voltage_t offset);
 
-  void StepPre(duration_t delta_t);
-  void StepPost(duration_t delta_t);
-
   void StepToPre(timestamp_t timestamp);
   void StepToPost(timestamp_t timestamp);
-
   voltage_t Value();
   SignalSource& Output();
 
@@ -42,9 +38,9 @@ protected:
   duration_t period_;
   voltage_t amplitude_;
   voltage_t offset_;
-  uint16_t phase_ = 0;
+  duration_t accum_{0};
 
-  OscillatorValueGetter getter_{this};
+  OscillatorValueGetter getter_{*this};
   SignalSource output_{*this, &getter_};
 };
 

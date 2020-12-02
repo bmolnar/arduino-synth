@@ -19,18 +19,19 @@ synth::SequencerPtr seq_list[] = {&seq0, &seq1};
 synth::MixerPtr mixer_list[] = {&mixer0};
 
 synth::SignalSourcePtr source_list[] = {
- osc0.Output(), osc1.Output(), osc2.Output(), osc3.Output(),
- seq0.Output(), seq1.Output(),
- mixer0.Output()
+ &osc0.Output(), &osc1.Output(), &osc2.Output(), &osc3.Output(),
+ &seq0.Output(), &seq1.Output(),
+ &mixer0.Output()
 };
 
 synth::DacMcp4725 dac;
-synth::Timer timer;
+
+synth::Clock clock;
 
 static synth::voltage_t g_value = synth::millivolts(0);
 static bool g_trace = false;
 static Print& g_logger = Serial;
-static synth::SignalSourcePtr g_source = mixer0.Output();
+static synth::SignalSourcePtr g_source = &mixer0.Output();
 static uint32_t g_loopcnt = 0;
 
 
@@ -92,7 +93,7 @@ static synth::CommandParserResponse::Status OnCommand(const char* cmd)
       }
     case 'I':
       {
-        g_logger.print("graph.objcnt="); g_logger.println(synth::Graph::Instance().ObjectCount());
+        //g_logger.print("graph.objcnt="); g_logger.println(synth::Graph::Instance().ObjectCount());
       }
       break;
     case 'O':
@@ -126,7 +127,7 @@ static synth::CommandParserResponse::Status OnCommand(const char* cmd)
     case 'S':
       {
         if (cmd[1] == '\0') {
-          g_source = synth::SignalSourcePtrNull;
+          g_source = nullptr;
           return kResultOk;
         }
         String valstr(cmd[1]);
@@ -179,22 +180,19 @@ synth::CommandParser cmd(Serial, &CommandCallback);
 void setup() {
   Serial.begin(9600);
   dac.Begin();
-  timer.Start();
+  clock.Start();
 }
 
 void loop() {
-  synth::duration_t delta_t = timer.ElapsedSinceLast();
+  synth::timestamp_t timestamp = clock.Now();
 
-  cmd.Step(delta_t);
-
-  synth::Graph::Instance().Step(delta_t);
-
-  synth::voltage_t value = (g_source != synth::SignalSourcePtrNull) ? g_source->Value() : g_value;
-  
+  cmd.StepTo(timestamp);
+  synth::voltage_t value = (g_source != nullptr) ? g_source->Value(timestamp) : g_value;
   if (g_trace) {
     Serial.print("T value="); Serial.println(value);
   }
-  dac.SetVoltage(value);
+  //dac.SetVoltage(value);
+  dac.StepTo(timestamp);
 
   g_loopcnt++;
 }

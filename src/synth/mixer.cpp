@@ -69,24 +69,6 @@ Mixer::Mixer(SignalSource& input0, SignalSource& input1, SignalSource& input2, S
   input_[6].Connect(input6);
   input_[7].Connect(input7);
 }
-
-#if GRAPH_UTILS
-uint8_t Mixer::GetNumChildren()
-{
-  uint8_t result = 0;
-  for (uint8_t i = 0; i < kMaxChannels; ++i) {
-    if (input_[i].Connected()) {
-      result++;
-    }
-  }
-  return result;
-}
-GraphObjectBasePtr Mixer::GetChild(uint8_t index)
-{
-  return &input_[index].Source()->Owner();
-}
-#endif // GRAPH_UTILS
-
 void Mixer::SetChannelInput(uint8_t channel, SignalSource& input)
 {
   input_[channel].Connect(input);
@@ -96,25 +78,6 @@ void Mixer::SetChannelGain(uint8_t channel, gain_t gain)
 {
   gain_[channel] = gain;
 }
-
-
-
-void Mixer::StepPre(duration_t delta_t)
-{
-  for (uint8_t i = 0; i < kMaxChannels; ++i) {
-    if (input_[i].Connected()) {
-      input_[i].Source()->Owner().Step(delta_t);
-    }
-  }
-}
-void Mixer::StepPost(duration_t delta_t)
-{
-  ((void) delta_t);
-}
-
-
-
-
 void Mixer::StepToPre(timestamp_t timestamp)
 {
   for (uint8_t i = 0; i < kMaxChannels; ++i) {
@@ -127,9 +90,6 @@ void Mixer::StepToPost(timestamp_t timestamp)
 {
   ((void) timestamp);
 }
-
-
-
 voltage_t Mixer::Value()
 {
   return static_cast<voltage_t>(
@@ -144,14 +104,49 @@ voltage_t Mixer::Value()
       (input_[7].Connected() ? (static_cast<int32_t>(gain_[7]) * static_cast<int32_t>(input_[7].GetValue())) : static_cast<int32_t>(0))
     ) / static_cast<int32_t>(kGainUnity));
 }
+SignalSink& Mixer::Input(uint8_t channel)
+{
+  return input_[channel];
+}
 SignalSource& Mixer::Output()
 {
   return output_;
 }
 
+#if GRAPH_UTILS
+uint8_t Mixer::GetNumChildren()
+{
+  uint8_t result = 0;
+  for (uint8_t i = 0; i < kMaxChannels; ++i) {
+    if (input_[i].Connected()) {
+      result++;
+    }
+  }
+  return result;
+}
+GraphObjectBasePtr Mixer::GetChild(uint8_t index)
+{
+  return (index < kMaxChannels) ? &input_[index].Source()->Owner() : nullptr;
+}
+#endif // GRAPH_UTILS
+
+
+//
+// MixerValueGetter
+//
 voltage_t MixerValueGetter::Get()
 {
-  return mixer_->Value();
+  return mixer_.Value();
 }
+
+
+//
+// MixerBaseValueGetter
+//
+voltage_t MixerBaseValueGetter::Get()
+{
+  return mixer_.Value();
+}
+
 
 } // namespace synth

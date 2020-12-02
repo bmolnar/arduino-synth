@@ -2,35 +2,23 @@
 
 namespace synth {
 
-
-void Dac::StepPre(duration_t delta_t)
+Dac::Dac()
 {
-  if (input_.Connected()) {
-    input_.Source()->Owner().Step(delta_t);
-    voltage_t value = input_.Source()->GetValue();
-    SetVoltage(value);
-  }
 }
-void Dac::StepPost(duration_t delta_t)
+Dac::~Dac()
 {
-  ((void) delta_t);
 }
-
-
 void Dac::StepToPre(timestamp_t timestamp)
 {
   if (input_.Connected()) {
     input_.Source()->Owner().StepTo(timestamp);
-    voltage_t value = input_.Source()->GetValue();
-    SetVoltage(value);
+    SetVoltage(input_.Source()->GetValue());
   }
 }
 void Dac::StepToPost(timestamp_t timestamp)
 {
   ((void) timestamp);
 }
-
-
 SignalSink& Dac::Input()
 {
   return input_;

@@ -9,17 +9,12 @@ namespace synth {
 class Dac : public GraphObject<Dac>
 {
 public:
-  Dac(){}
-  virtual ~Dac(){};
+  Dac();
+  virtual ~Dac();
   virtual void Begin() = 0;
   virtual void SetVoltage(voltage_t voltage) = 0;
-
-  virtual void StepPre(duration_t delta_t);
-  virtual void StepPost(duration_t delta_t);
-
   virtual void StepToPre(timestamp_t timestamp);
   virtual void StepToPost(timestamp_t timestamp);
-
   SignalSink& Input();
 
 #if GRAPH_UTILS

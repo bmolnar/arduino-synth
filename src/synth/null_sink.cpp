@@ -2,38 +2,37 @@
 
 namespace synth {
 
-NullSink::NullSink(SignalSource& source0)
-  : source0_(source0)
+NullSink::NullSink()
+  : input_{*this}
 {
 }
-
-
-void NullSink::StepPre(duration_t delta_t)
-{
-  source0_.Owner().Step(delta_t);
-}
-void NullSink::StepPost(duration_t delta_t)
+NullSink::NullSink(SignalSource& source)
+  : input_{*this, source}
 {
 }
-
+SignalSink& NullSink::Input()
+{
+  return input_;
+}
 void NullSink::StepToPre(timestamp_t timestamp)
 {
-  source0_.Owner().StepTo(timestamp);
+  if (input_.Connected()) {
+    input_.Source()->Owner().StepTo(timestamp);
+  }
 }
 void NullSink::StepToPost(timestamp_t timestamp)
 {
+  ((void) timestamp);
 }
-
-
 
 #if GRAPH_UTILS
 uint8_t NullSink::GetNumChildren()
 {
-  return 1;
+  return input_.Connected() ? 1 : 0;
 }
 GraphObjectBasePtr NullSink::GetChild(uint8_t index)
 {
-  return (index == 0) ? &source0_.Owner() : nullptr;
+  return (input_.Connected() && (index == 0)) ? &input_.Source()->Owner() : nullptr;
 }
 #endif
 

@@ -1,37 +1,43 @@
 #include <synth.h>
 
-synth::Oscillator osc0(synth::WaveformSine, synth::milliseconds(1000), synth::millivolts(1000), synth::millivolts(1000));
-synth::Oscillator osc1(synth::WaveformSine, synth::milliseconds(1000), synth::millivolts(500), synth::millivolts(500));
-synth::Oscillator osc2(synth::WaveformSine, synth::milliseconds(1000), synth::millivolts(100), synth::millivolts(100));
-synth::Oscillator osc3(synth::WaveformSine, synth::milliseconds(100), synth::millivolts(50), synth::millivolts(50));
-
-synth::OscillatorPtr osc_list[] = {&osc0, &osc1, &osc2, &osc3};
-
-synth::DacPrint dac0(Serial, synth::milliseconds(1000));
-synth::DacMcp4725 dac1;
-synth::DacPrintGraph dac2(Serial, synth::milliseconds(50));
-
-synth::Connection conn(osc0.Output(), dac1.Input());
+//synth::Oscillator osc(synth::WaveformSine, synth::milliseconds(1000), synth::millivolts(1000), synth::millivolts(1000));
+//synth::Oscillator osc(synth::WaveformSine, synth::milliseconds(1000), synth::millivolts(500), synth::millivolts(500));
+//synth::Oscillator osc(synth::WaveformSine, synth::milliseconds(1000), synth::millivolts(100), synth::millivolts(100));
+synth::Oscillator osc(synth::WaveformSine, synth::milliseconds(1000), synth::millivolts(4000), synth::millivolts(0));
 
 
-synth::Timer timer;
 
-synth::timestamp_t g_timestamp = 0;
-unsigned long g_loopcnt = 0;
+//synth::DacPrint dac(Serial, synth::milliseconds(1000));
+//synth::DacMcp4725 dac;
+synth::DacPrintGraph dac(Serial, synth::milliseconds(50));
+
+synth::Connection conn(osc.Output(), dac.Input());
+
+
+
+synth::NormalizedWaveform waveforms[] = {synth::WaveformSine, synth::WaveformTriangle, synth::WaveformSawtooth, synth::WaveformSquare, synth::WaveformZero};
+uint8_t g_waveform_select = 0;
+
+synth::Clock clock;
+
+
+void AdvanceWaveform()
+{
+  g_waveform_select = (g_waveform_select + 1) % 5;
+  osc.SetWaveform(waveforms[g_waveform_select]);
+}
+
+synth::Timer timer(synth::milliseconds(4000), &AdvanceWaveform);
 
 void setup() {
   Serial.begin(9600);
+  clock.Start();
   timer.Start();
-  dac1.Begin();
+  dac.Begin();
 }
 
 void loop() {
-  synth::duration_t delta_t = timer.ElapsedSinceLast();
-  g_timestamp += delta_t;
-
-  dac1.StepTo(g_timestamp);
-  if ((g_loopcnt % 1024) == 0) {
-    //PrintGraph(Serial, &dac2);
-  }
-
+  synth::timestamp_t timestamp = clock.Now();
+  timer.StepTo(timestamp);
+  dac.StepTo(timestamp);
 }

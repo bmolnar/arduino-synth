@@ -2,6 +2,9 @@
 
 namespace synth {
 
+//
+// Sequencer
+//
 Sequencer::Sequencer(duration_t step_period, duty_t duty, voltage_t* slots, uint8_t num_slots)
     : step_period_(step_period), duty_(duty), slots_(slots), slot_func_(nullptr), num_slots_(num_slots)
 {
@@ -10,7 +13,6 @@ Sequencer::Sequencer(duration_t step_period, duty_t duty, SequencerSlotFunction 
     : step_period_(step_period), duty_(duty), slots_(nullptr), slot_func_(slot_func), num_slots_(num_slots)
 {
 }
-
 
 void Sequencer::StepPre(duration_t delta_t)
 {
@@ -53,10 +55,17 @@ SignalSource& Sequencer::GateOutput()
   return gate_output_;
 }
 
+//
+// SequenceValueGetter
+//
 voltage_t SequencerValueGetter::Get()
 {
   return seq_->Value();
 }
+
+//
+// SequenceGateGetter
+//
 voltage_t SequencerGateGetter::Get()
 {
   return seq_->GateValue();

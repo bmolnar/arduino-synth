@@ -5,14 +5,20 @@
 
 namespace synth {
 
+typedef void (*TimerCallback)(void);
+
 class Timer
 {
 public:
-  Timer();
+  Timer(duration_t period, TimerCallback callback);
   void Start();
-  duration_t ElapsedSinceLast();
+  void StepTo(timestamp_t timestamp);
+
 protected:
-  duration_t last_usec_;
+  duration_t period_;
+  TimerCallback callback_;
+  timestamp_t last_timestamp_{0};
+  duration_t accum_{0};
 };
 
 } // namespace synth

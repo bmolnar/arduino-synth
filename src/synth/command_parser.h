@@ -1,6 +1,7 @@
 #ifndef SYNTH__COMMAND_PARSER_H_
 #define SYNTH__COMMAND_PARSER_H_
 
+#include "types.h"
 #include <Arduino.h>
 
 namespace synth {
@@ -33,6 +34,7 @@ public:
   static const uint8_t kBufSize = 16;
   CommandParser(HardwareSerial& serial, CommandParserCallback callback);
   void Step(uint32_t delta_t);
+  void StepTo(timestamp_t timestamp);
 
 private:
   void PushChar(char c);

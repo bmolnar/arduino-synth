@@ -16,6 +16,16 @@ void CommandParser::Step(uint32_t delta_t)
     }
   }
 }
+
+void CommandParser::StepTo(timestamp_t timestamp)
+{
+  if (serial_.available() > 0) {
+    int rval = serial_.read();
+    if (rval >= 0) {
+      PushChar(static_cast<char>(rval));
+    }
+  }
+}
 void CommandParser::PushChar(char c)
 {
   if (c == '\r') {

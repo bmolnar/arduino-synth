@@ -26,24 +26,14 @@ protected:
   RemapPtr remap_;
 };
 
-
 class Remap : public GraphObject<Remap>
 {
 public:
   Remap(const RemapParams& params);
   Remap(const RemapParams& params, SignalSource& input0);
-
-  void SetChannelInput(uint8_t channel, SignalSource& input);
-  void SetChannelGain(uint8_t channel, gain_t gain);
-
-  void StepPre(duration_t delta_t);
-  void StepPost(duration_t delta_t);
-
   void StepToPre(timestamp_t timestamp);
   void StepToPost(timestamp_t timestamp);
-
   voltage_t Value();
-
   SignalSink& Input();
   SignalSource& Output();
 

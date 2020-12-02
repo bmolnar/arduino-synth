@@ -18,20 +18,14 @@ class GraphObjectBase
 public:
   GraphObjectBase();
   virtual ~GraphObjectBase();
-
-  virtual void StepPre(duration_t) {}
-  virtual void StepPost(duration_t) {}
-  void Step(duration_t delta_t);
-
-  virtual void StepToPre(timestamp_t timestamp) {}
-  virtual void StepToPost(timestamp_t timestamp) {}
+  timestamp_t Timestamp();
+  virtual void StepToPre(timestamp_t timestamp);
+  virtual void StepToPost(timestamp_t timestamp);
   void StepTo(timestamp_t timestamp);
 
-  timestamp_t Timestamp() { return timestamp_; }
-
 #if GRAPH_UTILS
-  virtual uint8_t GetNumChildren() { return 0; }
-  virtual GraphObjectBasePtr GetChild(uint8_t index) { return nullptr; }
+  virtual uint8_t GetNumChildren();
+  virtual GraphObjectBasePtr GetChild(uint8_t index);
 #endif
 
 protected:
@@ -55,6 +49,7 @@ protected:
   uint8_t count_{0};
 };
 
+
 class SignalGetter
 {
 public:
@@ -62,29 +57,35 @@ public:
 };
 typedef SignalGetter* SignalGetterPtr;
 
-
+/**
+ * SignalSource
+ */
 class SignalSource
 {
 public:
-  SignalSource(GraphObjectBase& owner, SignalGetterPtr getter) : owner_(owner), getter_(getter) {}
-  GraphObjectBase& Owner() { return owner_; }
+  SignalSource(GraphObjectBase& owner, SignalGetterPtr getter);
+  GraphObjectBase& Owner();
   voltage_t GetValue();
   voltage_t Value(const timestamp_t& timestamp);
 protected:
   GraphObjectBase& owner_;
   SignalGetterPtr getter_;
 };
-
 typedef SignalSource* SignalSourcePtr;
+
+
+
+
 
 class SignalSink
 {
 public:
-  SignalSink(GraphObjectBase& owner) : owner_(owner) {}
-  SignalSink(GraphObjectBase& owner, SignalSourcePtr source) : owner_(owner), source_(source) {}
-  GraphObjectBase& Owner() { return owner_; }
-  SignalSourcePtr Source() { return source_; }
-  bool Connected() { return (source_ != nullptr); }
+  SignalSink(GraphObjectBase& owner, voltage_t default_voltage = millivolts(0));
+  SignalSink(GraphObjectBase& owner, SignalSourcePtr source, voltage_t default_voltage = millivolts(0));
+  SignalSink(GraphObjectBase& owner, SignalSource& source, voltage_t default_voltage = millivolts(0));
+  GraphObjectBase& Owner();
+  SignalSourcePtr Source();
+  bool Connected();
   void Connect(SignalSource& source);
   void Disconnect();
   voltage_t GetValue();
@@ -92,6 +93,26 @@ public:
 protected:
   GraphObjectBase& owner_;
   SignalSourcePtr source_;
+  voltage_t default_voltage_;
+};
+typedef SignalSink* SignalSinkPtr;
+
+
+class SignalSinkStatic
+{
+public:
+  SignalSinkStatic(GraphObjectBase& owner, SignalSource& source, voltage_t default_voltage = millivolts(0));
+  GraphObjectBase& Owner();
+  SignalSource& Source();
+  bool Connected();
+  void Connect(SignalSource& source);
+  void Disconnect();
+  voltage_t GetValue();
+  voltage_t Value(const timestamp_t& timestamp);
+protected:
+  GraphObjectBase& owner_;
+  SignalSource& source_;
+  voltage_t default_voltage_;
 };
 
 

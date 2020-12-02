@@ -11,12 +11,10 @@ DacPrint::DacPrint(Print& print, SignalSource& source, duration_t flush_period)
 {
   input_.Connect(source);
 }
-
 void DacPrint::Begin()
 {
   ResetStats(stats_);
 }
-
 void DacPrint::PrintStats(const DacPrintStats& stats)
 {
   print_.print("last=");
@@ -45,30 +43,6 @@ void DacPrint::ResetStats(DacPrintStats& stats)
   stats.accum_time = 0;
   stats.updates = 0;
 }
-
-
-
-void DacPrint::StepPre(duration_t delta_t)
-{
-  // This calls SetVoltage
-  Dac::StepPre(delta_t);
-
-  stats_.accum_time += delta_t;
-  flush_accum_ += delta_t;
-  if (flush_accum_ >= flush_period_) {
-    PrintStats(stats_);
-    ResetStats(stats_);
-    flush_accum_ = flush_accum_ % flush_period_;
-  }
-}
-void DacPrint::StepPost(duration_t delta_t)
-{
-}
-
-
-
-
-
 void DacPrint::StepToPre(timestamp_t timestamp)
 {
   // This calls SetVoltage
@@ -86,9 +60,6 @@ void DacPrint::StepToPre(timestamp_t timestamp)
 void DacPrint::StepToPost(timestamp_t timestamp)
 {
 }
-
-
-
 void DacPrint::SetVoltage(voltage_t voltage)
 {
   stats_.last_value = voltage;
