@@ -17,11 +17,13 @@ struct NoteDiv
 
 static constexpr NoteDiv kWholeNote{4, 1};
 static constexpr NoteDiv kHalfNote{2, 1};
-static constexpr NoteDiv kDottenHalfNote{3, 1};
+static constexpr NoteDiv kDottedHalfNote{3, 1};
 static constexpr NoteDiv kQuarterNote{1, 1};
 static constexpr NoteDiv kDottedQuarterNote{3, 2};
 static constexpr NoteDiv kEighthNote{1, 2};
+static constexpr NoteDiv kDottedEighthNote{3, 4};
 static constexpr NoteDiv kSixteenthNote{1, 4};
+static constexpr NoteDiv kDottedSixteenthNote{3, 8};
 static constexpr NoteDiv kEndNote{0, 0};
 
 struct Note
@@ -36,9 +38,9 @@ struct Note
   {
     return Note{div, 255, pitch};
   }
-  static constexpr Note Make(const NoteDiv& div, const Pitch& pitch)
+  static constexpr Note Normal(const NoteDiv& div, const Pitch& pitch)
   {
-    return Note{div, 128, pitch};
+    return Note{div, 192, pitch};
   }
   static constexpr Note Rest(const NoteDiv& div)
   {

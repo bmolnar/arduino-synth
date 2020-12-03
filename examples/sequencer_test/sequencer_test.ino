@@ -13,23 +13,20 @@ synth::voltage_t slots1[] = {
 };
 
 
-synth::Sequencer seq(synth::milliseconds(128), synth::kDutyHalf, slots1, 8);
+synth::Sequencer seq(synth::milliseconds(128), synth::kDutyHalf, slots0, 8);
 
-synth::RemapLinear remap({synth::millivolts(0), synth::millivolts(10000), synth::millivolts(0), synth::millivolts(5000)}, seq.Output());
-
-
-//synth::DacMcp4725 dac;
+synth::DacMcp4725 dac;
 //synth::DacPrint dac(Serial, synth::milliseconds(500));
-synth::DacPrintGraph dac(Serial, remap.Output(), synth::milliseconds(500));
+//synth::DacPrintGraph dac(Serial, remap.Output(), synth::milliseconds(500));
+
+synth::MapperLinear mapper({synth::millivolts(0), synth::millivolts(10000), synth::millivolts(0), synth::millivolts(5000)});
+//synth::DacRemap dac(dac_inner, mapper);
+
+synth::DigitalOut dout(8);
 
 
-synth::DigitalOut dout(8, seq.GateOutput());
-
-
-
-//synth::Connection conn0(seq.Output(), remap.Input());
-//synth::Connection conn1(remap.Output(), dac.Input());
-//synth::Connection conn2(seq.GateOutput(), dout.Input());
+synth::Connection conn0(seq.Output(), dac.Input());
+synth::Connection conn1(seq.GateOutput(), dout.Input());
 
 synth::Clock clock;
 

@@ -8,7 +8,7 @@ class Key:
     self.value = value
 
 KEYS = [
-  Key("C", 0), Key("Cs", 1), Key("Dd", 1), Key("D", 2),
+  Key("C", 0), Key("Cs", 1), Key("Db", 1), Key("D", 2),
   Key("Ds", 3), Key("Eb", 3), Key("E", 4), Key("F", 5),
   Key("Fs", 6), Key("Gb", 6), Key("G", 7), Key("Gs", 8), Key("Ab", 8),
   Key("A", 9), Key("As", 10), Key("Bb", 10), Key("B", 11),
