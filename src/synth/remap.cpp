@@ -5,14 +5,13 @@ namespace synth {
 //
 // Remap
 //
-Remap::Remap(const RemapParams& params)
- : params_(params)
+Remap::Remap(Mapper& mapper)
+ : mapper_(mapper)
 {
 }
-Remap::Remap(const RemapParams& params, SignalSource& input)
- : params_(params)
+Remap::Remap(Mapper& mapper, SignalSource& input)
+ : mapper_(mapper), input_{*this, input}
 {
-  input_.Connect(input);
 }
 void Remap::StepToPre(timestamp_t timestamp)
 {
@@ -27,7 +26,8 @@ void Remap::StepToPost(timestamp_t timestamp)
 voltage_t Remap::Value()
 {
   voltage_t voltage = input_.Connected() ? input_.GetValue() : 0;
-  return static_cast<voltage_t>((static_cast<int32_t>(voltage) - static_cast<int32_t>(params_.in_min)) * (static_cast<int32_t>(params_.out_max) - static_cast<int32_t>(params_.out_min)) / (static_cast<int32_t>(params_.in_max) - static_cast<int32_t>(params_.in_min)));
+  //return RemapVoltage(params_, voltage);
+  return mapper_.Map(voltage);
 }
 SignalSink& Remap::Input()
 {
@@ -54,7 +54,7 @@ GraphObjectBasePtr Remap::GetChild(uint8_t index)
 //
 voltage_t RemapValueGetter::Get()
 {
-  return remap_->Value();
+  return remap_.Value();
 }
 
 } // namespace synth

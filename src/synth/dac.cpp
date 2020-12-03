@@ -27,11 +27,11 @@ SignalSink& Dac::Input()
 #ifdef GRAPH_UTILS
 uint8_t Dac::GetNumChildren()
 {
-  return (input_.Connected()) ? 1 : 0;
+  return (Input().Connected()) ? 1 : 0;
 }
 GraphObjectBasePtr Dac::GetChild(uint8_t index)
 {
-  return (input_.Connected() && index == 0) ? &input_.Source()->Owner() : nullptr;
+  return (Input().Connected() && index == 0) ? &Input().Source()->Owner() : nullptr;
 }
 #endif
 

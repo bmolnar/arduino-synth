@@ -15,7 +15,7 @@ public:
   virtual void SetVoltage(voltage_t voltage) = 0;
   virtual void StepToPre(timestamp_t timestamp);
   virtual void StepToPost(timestamp_t timestamp);
-  SignalSink& Input();
+  virtual SignalSink& Input();
 
 #if GRAPH_UTILS
   uint8_t GetNumChildren();

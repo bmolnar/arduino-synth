@@ -2,8 +2,6 @@
 
 namespace pitch = synth::pitch;
 
-
-
 synth::Note notes[] = {
   synth::Note::Make(synth::kQuarterNote, pitch::Pitch_C2), synth::Note::Make(synth::kQuarterNote, pitch::Pitch_D2),
   synth::Note::Make(synth::kQuarterNote, pitch::Pitch_E2), synth::Note::Make(synth::kQuarterNote, pitch::Pitch_F2),

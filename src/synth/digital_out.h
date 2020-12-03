@@ -12,6 +12,8 @@ public:
   static constexpr voltage_t kHighThreshold = millivolts(3300);
 
   DigitalOut(int pin);
+  DigitalOut(int pin, SignalSource& source);
+
   ~DigitalOut();
   void Begin();
   void SetVoltage(voltage_t voltage);

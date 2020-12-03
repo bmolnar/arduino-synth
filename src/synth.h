@@ -16,6 +16,7 @@
 #include "synth/dac_print.h"
 #include "synth/dac_print_graph.h"
 #include "synth/dac_mcp4725.h"
+#include "synth/dac_remap.h"
 #include "synth/command_parser.h"
 #include "synth/util.h"
 

@@ -8,6 +8,10 @@ DigitalOut::DigitalOut(int pin)
   : pin_(pin)
 {
 }
+DigitalOut::DigitalOut(int pin, SignalSource& source)
+  : pin_(pin), input_{*this, source}
+{
+}
 DigitalOut::~DigitalOut()
 {
 }
