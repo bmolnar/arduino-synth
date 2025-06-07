@@ -8,7 +8,7 @@ Components include:
 - Mixers
 - Control voltage and gate (VC/Gate) source
 - Sequencers
-- Digital-to-analog converters (DACs)
+- Support for digital-to-analog converters (DACs)
 
 
 ## Example Code
