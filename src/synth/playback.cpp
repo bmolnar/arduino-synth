@@ -2,17 +2,38 @@
 
 namespace synth {
 
-
 static duration_t NoteDivToDuration(duration_t quarter_duration, const NoteDiv& div)
 {
   return quarter_duration * static_cast<duration_t>(div.num) / static_cast<duration_t>(div.den);
 }
 
+//
+// Playback
+//
 Playback::Playback(duration_t quarter_duration, Note* note)
   : quarter_duration_(quarter_duration), note_(note)
 {
 }
 
+voltage_t Playback::Value()
+{
+  return ToVoltage(note_->pitch);
+}
+
+SignalSource& Playback::Output()
+{
+  return output_;
+}
+
+voltage_t Playback::GateValue()
+{
+  return (!note_->IsEnd() && accum_ < ((static_cast<duration_t>(note_->gate) * NoteDivToDuration(quarter_duration_, note_->div)) / 255)) ? millivolts(5000) : millivolts(0);
+}
+
+SignalSource& Playback::GateOutput()
+{
+  return gate_output_;
+}
 
 void Playback::StepToPre(timestamp_t timestamp)
 {
@@ -23,36 +44,23 @@ void Playback::StepToPre(timestamp_t timestamp)
     note_++;
   }
 }
+
 void Playback::StepToPost(timestamp_t timestamp)
 {
   ((void) timestamp);
 }
 
-
-voltage_t Playback::Value()
-{
-  return ToVoltage(note_->pitch);
-}
-voltage_t Playback::GateValue()
-{
-  return (!note_->IsEnd() && accum_ < ((static_cast<duration_t>(note_->gate) * NoteDivToDuration(quarter_duration_, note_->div)) / 255)) ? millivolts(5000) : millivolts(0);
-}
-
-
-SignalSource& Playback::Output()
-{
-  return output_;
-}
-SignalSource& Playback::GateOutput()
-{
-  return gate_output_;
-}
-
-
+//
+// PlaybackValueGetter
+//
 voltage_t PlaybackValueGetter::Get()
 {
   return playback_.Value();
 }
+
+//
+// PlaybackGateGetter
+//
 voltage_t PlaybackGateGetter::Get()
 {
   return playback_.GateValue();

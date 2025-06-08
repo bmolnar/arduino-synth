@@ -32,8 +32,27 @@ class CommandParser
 {
 public:
   static const uint8_t kBufSize = 16;
+
+  /**
+   * Initializes command parser
+   *
+   * @param serial The HardwareSerial object acting as input
+   * @param callback Function to be called on successful decoding of command
+   */
   CommandParser(HardwareSerial& serial, CommandParserCallback callback);
+
+  /**
+   * Advances state machine
+   *
+   * @param delta_t Duration of time
+   */
   void Step(uint32_t delta_t);
+
+  /**
+   * Advances graph object to given time
+   *
+   * @param timestamp Time to advance graph object to
+   */
   void StepTo(timestamp_t timestamp);
 
 private:

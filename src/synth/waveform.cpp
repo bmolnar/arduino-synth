@@ -74,18 +74,22 @@ norm_t WaveformSine(phase_t phase)
 {
   return static_cast<norm_t>(pgm_read_word(&WaveformSineTable512[phase >> 7]));
 }
+
 norm_t WaveformSawtooth(phase_t phase)
 {
   return static_cast<norm_t>(phase);
 }
+
 norm_t WaveformTriangle(phase_t phase)
 {
   return (phase < (kPhasePi/2) || phase >= (3*(kPhasePi/2))) ? WaveformSawtooth(2*phase) : -WaveformSawtooth(2*phase);
 }
+
 norm_t WaveformSquare(phase_t phase)
 {
   return (phase < kPhasePi) ? NORM_MAX : NORM_MIN;
 }
+
 norm_t WaveformZero(phase_t phase)
 {
   return static_cast<norm_t>(0);

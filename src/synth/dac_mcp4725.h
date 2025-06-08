@@ -8,12 +8,33 @@
 
 namespace synth {
 
+/**
+ * DacMcp4725
+ *
+ * A digital-to-analog converter that uses the MCP4725
+ */
 class DacMcp4725 : public Dac
 {
 public:
+  /**
+   * Initializes object
+   */
   DacMcp4725();
+
+  /**
+   * Initiates runtime operation
+   *
+   * To be called by user before operation begins
+   */
   virtual void Begin();
+
+  /**
+   * Sets the output voltage of the MCP4725 DAC
+   *
+   * @param voltage Output value in Volts
+   */
   virtual void SetVoltage(voltage_t voltage);
+
 protected:
   Adafruit_MCP4725 mcp4725_;
 };

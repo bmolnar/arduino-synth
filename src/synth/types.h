@@ -43,6 +43,8 @@ static constexpr duty_t DutyPercent(uint8_t pct)
 //
 // phase_t
 //
+// Represents values in [0, 2*pi) divided into 65536 increments
+//
 typedef uint16_t phase_t;
 static constexpr phase_t kPhasePi = 32768;
 static constexpr phase_t DurationToPhase(duration_t dur, duration_t period)
@@ -52,18 +54,26 @@ static constexpr phase_t DurationToPhase(duration_t dur, duration_t period)
 
 //
 // unorm_t
-// Unsigned Normalized Value [0, 65535/65536]
+//
+// Represents unsigned values in [0, 65535/65536]
 //
 typedef uint16_t unorm_t;
+static const unorm_t kUNormMin = 0;
+static const unorm_t kUNormMax = 65535;
+
 static const uint32_t UNORM_MIN = 0;
 static const uint32_t UNORM_MAX = 65535;
 static const uint32_t UNORM_DIVISOR = 65535;
 
 //
 // norm_t
-// Signed Normalized Value [-32768/32768, 32767/32768]
+//
+// Represents signed values in [-32767/32767, 32767/32767]
 //
 typedef int16_t norm_t;
+static const norm_t kNormMin = -32767;
+static const norm_t kNormMax = 32767;
+
 static const int32_t NORM_MIN = -32767;
 static const int32_t NORM_MAX = 32767;
 static const int32_t NORM_DIVISOR = 32767;
@@ -71,7 +81,11 @@ static const int32_t NORM_DIVISOR = 32767;
 //
 // voltage_t
 //
+// Represents voltage value in millivolts in range [-32.768 V, 32.767 V]
+//
 typedef int16_t voltage_t;
+static const voltage_t kVoltageMin = -32768;
+static const voltage_t kVoltageMax = 32767;
 static constexpr voltage_t millivolts(int16_t value)
 {
   return static_cast<voltage_t>(value);
@@ -80,8 +94,6 @@ static constexpr voltage_t volts(int16_t value)
 {
   return static_cast<voltage_t>(1000 * value);
 }
-static const voltage_t kVoltageMin = -32768;
-static const voltage_t kVoltageMax = 32767;
 
 //
 // gain_t
@@ -99,7 +111,6 @@ static constexpr gain_t GainPercent(int16_t pct)
 typedef norm_t (*NormalizedPeriodicFunction)(phase_t);
 typedef NormalizedPeriodicFunction PeriodicFunction;
 typedef NormalizedPeriodicFunction NormalizedWaveform;
-
 
 
 //

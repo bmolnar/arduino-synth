@@ -5,10 +5,12 @@ namespace synth {
 DacMcp4725::DacMcp4725()
 {
 }
+
 void DacMcp4725::Begin()
 {
   mcp4725_.begin(0x60);
 }
+
 void DacMcp4725::SetVoltage(voltage_t voltage)
 {
   int32_t value = static_cast<int32_t>(voltage) * 4096 / 5000;

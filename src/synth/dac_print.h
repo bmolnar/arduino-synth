@@ -18,15 +18,58 @@ struct DacPrintStats
   uint32_t updates{0};
 };
 
+
+/**
+ * DacPrint
+ *
+ * Functions as a digital-to-analog converter, but whose output is printed
+ * as numerical values.
+ */
 class DacPrint : public Dac
 {
 public:
+  /**
+   * Initializes object with `Print` object and flush duration
+   *
+   * @param print A `Print` object where the output is sent to
+   * @param flush_period How often the `Print` object is flushed
+   */
   DacPrint(Print& print, duration_t flush_period=milliseconds(1000));
+
+  /**
+   * Initializes object with `Print` object, signal source, and flush duration
+   *
+   * @param print A `Print` object where the output is sent to
+   * @param source A `SignalSource` object that supplies the signal to this
+                   component
+   * @param flush_period How often the `Print` object is flushed
+   */
   DacPrint(Print& print, SignalSource& source, duration_t flush_period=milliseconds(1000));
+
   virtual void Begin();
-  virtual void StepToPre(timestamp_t timestamp);
-  virtual void StepToPost(timestamp_t timestamp);
+
+  /**
+   * Sets output voltage of DAC
+   *
+   * This value is printed (numerically) to the output
+   *
+   * @param voltage Output voltage to be printed
+   */
   virtual void SetVoltage(voltage_t voltage);
+
+  /**
+   * Called just before `StepTo` by run graph
+   *
+   * @param timestamp The time stamp provided in the `StepTo` call
+   */
+  virtual void StepToPre(timestamp_t timestamp);
+
+  /**
+   * Called just after `StepTo` by run graph
+   *
+   * @param timestamp The time stamp provided in the `StepTo` call
+   */
+  virtual void StepToPost(timestamp_t timestamp);
 
 protected:
   void PrintStats(const DacPrintStats& stats);

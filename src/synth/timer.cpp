@@ -6,11 +6,13 @@ Timer::Timer(duration_t period, TimerCallback callback)
     : period_(period), callback_(callback)
 {
 }
+
 void Timer::Start()
 {
   last_timestamp_ = micros();
   accum_ = 0;
 }
+
 void Timer::StepTo(timestamp_t timestamp)
 {
   accum_ += timestamp - last_timestamp_;

@@ -10,8 +10,24 @@ typedef void (*TimerCallback)(void);
 class Timer
 {
 public:
+  /**
+   * Initializes timer that periodically calls a callback
+   *
+   * @param period Duration between callbacks
+   * @param Function to be called each interval
+   */
   Timer(duration_t period, TimerCallback callback);
+
+  /**
+   * Starts the timer
+   */
   void Start();
+
+  /**
+   * Advances timer to given time
+   *
+   * @param timestamp Current time
+   */
   void StepTo(timestamp_t timestamp);
 
 protected:

@@ -5,10 +5,12 @@ namespace synth {
 Clock::Clock()
 {
 }
+
 void Clock::Start()
 {
   count_ = 0;
 }
+
 timestamp_t Clock::Now()
 {
   timestamp_t now = micros();

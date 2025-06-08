@@ -9,8 +9,19 @@ class Clock
 {
 public:
   Clock();
+
+  /**
+   * Resets and starts the clock
+   */
   void Start();
+
+  /**
+   * Gets current value of timer
+   *
+   * @return Elapsed time in microseconds
+   */
   timestamp_t Now();
+
 protected:
   timestamp_t start_{0};
   unsigned long count_{0};
