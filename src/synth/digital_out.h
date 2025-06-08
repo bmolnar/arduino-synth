@@ -79,4 +79,4 @@ protected:
 
 } // namespace synth
 
-#endif // SYNTH__DAC_MCP4725_H_
+#endif // SYNTH__DIGITAL_OUT_H_
