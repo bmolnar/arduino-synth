@@ -46,6 +46,11 @@ public:
    */
   DacPrint(Print& print, SignalSource& source, duration_t flush_period=milliseconds(1000));
 
+  /**
+   * Initiates runtime operation
+   *
+   * To be called by user before operation begins
+   */
   virtual void Begin();
 
   /**

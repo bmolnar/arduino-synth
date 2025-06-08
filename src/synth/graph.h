@@ -24,7 +24,6 @@ class SignalSink;
 typedef SignalSink* SignalSinkPtr;
 
 
-
 /**
  * Graph
  *

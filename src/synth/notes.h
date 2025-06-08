@@ -10,14 +10,23 @@ struct Pitch
   uint8_t value;
 };
 
+/**
+ * Converts a Pitch value into a CV voltage (1 V/oct)
+ *
+ * @param pitch A const reference to a Pitch struct
+ * @return A voltage value (in mV) corresponding to CV (1 V/oct) voltage for the
+ **        pitch
+ */
 static constexpr voltage_t ToVoltage(const Pitch& pitch)
 {
   return static_cast<voltage_t>((static_cast<int32_t>(pitch.value) - 12) * static_cast<int32_t>(millivolts(1000)) / 12);
 }
 
-
 namespace pitch {
 
+//
+// Pitch constants given as Pitch structs
+//
 static constexpr Pitch Pitch_C0{12};
 static constexpr Pitch Pitch_Cs0{13};
 static constexpr Pitch Pitch_Db0{13};
@@ -184,9 +193,9 @@ static constexpr Pitch Pitch_Gb9{126};
 static constexpr Pitch Pitch_G9{127};
 
 
-
-
-
+//
+// Pitch constants given in terms of MIDI note
+//
 namespace midi {
 static const uint8_t Pitch_C0 = 12;
 static const uint8_t Pitch_Cs0 = 13;
@@ -354,6 +363,10 @@ static const uint8_t Pitch_Gb9 = 126;
 static const uint8_t Pitch_G9 = 127;
 } // namespace midi
 
+
+//
+// Pitch constants given in terms of CV voltages (1 V/oct)
+//
 namespace voltage {
 static const voltage_t Pitch_C0 = millivolts(0);
 static const voltage_t Pitch_Cs0 = millivolts(83);
@@ -523,4 +536,5 @@ static const voltage_t Pitch_G9 = millivolts(9583);
 
 } // namespace pitch
 } // namespace synth
+
 #endif // SYNTH__NOTES_H_

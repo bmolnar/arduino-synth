@@ -6,15 +6,51 @@ DacPrint::DacPrint(Print& print, duration_t flush_period)
  : print_(print), flush_period_(flush_period)
 {
 }
+
 DacPrint::DacPrint(Print& print, SignalSource& source, duration_t flush_period)
  : print_(print), flush_period_(flush_period)
 {
   input_.Connect(source);
 }
+
 void DacPrint::Begin()
 {
   ResetStats(stats_);
 }
+
+void DacPrint::SetVoltage(voltage_t voltage)
+{
+  stats_.last_value = voltage;
+  if (voltage > stats_.max_value) {
+    stats_.max_value = voltage;
+  }
+  if (voltage < stats_.min_value) {
+    stats_.min_value = voltage;
+  }
+  stats_.accum_sum += voltage;
+  stats_.accum_sum_sq += (voltage * voltage);
+  stats_.updates++;
+}
+
+void DacPrint::StepToPre(timestamp_t timestamp)
+{
+  // This calls SetVoltage
+  Dac::StepToPre(timestamp);
+
+  duration_t delta_t = (timestamp - timestamp_);
+  stats_.accum_time += delta_t;
+  flush_accum_ += delta_t;
+  if (flush_accum_ >= flush_period_) {
+    PrintStats(stats_);
+    ResetStats(stats_);
+    flush_accum_ = flush_accum_ % flush_period_;
+  }
+}
+
+void DacPrint::StepToPost(timestamp_t timestamp)
+{
+}
+
 void DacPrint::PrintStats(const DacPrintStats& stats)
 {
   print_.print("last=");
@@ -33,6 +69,7 @@ void DacPrint::PrintStats(const DacPrintStats& stats)
   print_.print(stats.accum_time / stats.updates);
   print_.println();
 }
+
 void DacPrint::ResetStats(DacPrintStats& stats)
 {
   stats.min_value = kVoltageMax;
@@ -42,36 +79,6 @@ void DacPrint::ResetStats(DacPrintStats& stats)
   stats.accum_sum_sq = 0;
   stats.accum_time = 0;
   stats.updates = 0;
-}
-void DacPrint::StepToPre(timestamp_t timestamp)
-{
-  // This calls SetVoltage
-  Dac::StepToPre(timestamp);
-
-  duration_t delta_t = (timestamp - timestamp_);
-  stats_.accum_time += delta_t;
-  flush_accum_ += delta_t;
-  if (flush_accum_ >= flush_period_) {
-    PrintStats(stats_);
-    ResetStats(stats_);
-    flush_accum_ = flush_accum_ % flush_period_;
-  }
-}
-void DacPrint::StepToPost(timestamp_t timestamp)
-{
-}
-void DacPrint::SetVoltage(voltage_t voltage)
-{
-  stats_.last_value = voltage;
-  if (voltage > stats_.max_value) {
-    stats_.max_value = voltage;
-  }
-  if (voltage < stats_.min_value) {
-    stats_.min_value = voltage;
-  }
-  stats_.accum_sum += voltage;
-  stats_.accum_sum_sq += (voltage * voltage);
-  stats_.updates++;
 }
 
 } // namespace synth

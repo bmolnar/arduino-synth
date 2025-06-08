@@ -21,26 +21,31 @@ Graph& Graph::Instance()
 GraphObjectBase::GraphObjectBase()
 {
 }
+
 GraphObjectBase::~GraphObjectBase()
 {
 }
+
 timestamp_t GraphObjectBase::Timestamp()
 {
   return timestamp_;
 }
-void GraphObjectBase::StepToPre(timestamp_t timestamp)
-{
-  ((void) timestamp);
-}
-void GraphObjectBase::StepToPost(timestamp_t timestamp)
-{
-  ((void) timestamp);
-}
+
 void GraphObjectBase::StepTo(timestamp_t timestamp)
 {
   StepToPre(timestamp);
   timestamp_ = timestamp;
   StepToPost(timestamp);
+}
+
+void GraphObjectBase::StepToPre(timestamp_t timestamp)
+{
+  ((void) timestamp);
+}
+
+void GraphObjectBase::StepToPost(timestamp_t timestamp)
+{
+  ((void) timestamp);
 }
 
 #if GRAPH_UTILS
