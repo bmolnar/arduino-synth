@@ -33,18 +33,18 @@ public:
   /**
    * Initializes object with given waveform, period, amplitude and offset
    *
-   * @param waveform A `NormalizedWaveform` value representing the periodic
+   * @param waveform A NormalizedWaveform value representing the periodic
    *                 waveform of the output signal
    * @param period The period of the output signal, in microseconds
-   * @param amplitude The amplitude of the output signal, in Volts
-   * @param offset The DC offset of the output signal, in Volts
+   * @param amplitude The amplitude of the output signal, in mV
+   * @param offset The DC offset of the output signal, in mV
    */
   Oscillator(NormalizedWaveform waveform, duration_t period, voltage_t amplitude=millivolts(1000), voltage_t offset=millivolts(0));
 
   /**
    * Sets the waveform of the output signal
    *
-   * @param waveform A `NormalizedWaveform` value representing the periodic
+   * @param waveform A NormalizedWaveform value representing the periodic
    *                 waveform of the output signal
    */
   void SetWaveform(NormalizedWaveform waveform);
@@ -59,45 +59,42 @@ public:
   /**
    * Sets the amplitude of the output signal
    *
-   * @param amplitude The amplitude of the output signal, in Volts
+   * @param amplitude The amplitude of the output signal, in mV
    */
   void SetAmplitude(voltage_t amplitude);
 
   /**
    * Sets the DC offset of the output signal
    *
-   * @param offset The DC offset of the output signal, in Volts
+   * @param offset The DC offset of the output signal, in mV
    */
   void SetOffset(voltage_t offset);
 
   /**
    * Gets the current value of the output signal
    *
-   * @return The current value of the output signal, in Volts
+   * @return The current value of the output signal, in mV
    */
   voltage_t Value();
 
   /**
-   * Gets a `SignalSource` object representing the output signal
+   * Gets a reference to the output SignalSource for the oscillator
    *
-   * This can be connected to a `SignalSink` object using a `Connection` object
-   *
-   * @return A reference to a `SignalSource` object representing the output
-   *         signal
+   * @return A reference to the SignalSource of the oscillator output
    */
   SignalSource& Output();
 
   /**
-   * Called by run graph just before `StepTo`
+   * Called by run graph just before StepTo
    *
-   * @param timestamp The time stamp provided in the `StepTo` call
+   * @param timestamp The time stamp provided in the StepTo call
    */
   void StepToPre(timestamp_t timestamp);
 
   /**
-   * Called by run graph just after `StepTo`
+   * Called by run graph just after StepTo
    *
-   * @param timestamp The time stamp provided in the `StepTo` call
+   * @param timestamp The time stamp provided in the StepTo call
    */
   void StepToPost(timestamp_t timestamp);
 

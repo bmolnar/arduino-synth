@@ -7,9 +7,7 @@
 
 namespace synth {
 
-//
 // Forward declarations
-//
 class Playback;
 typedef Playback* PlaybackPtr;
 
@@ -21,7 +19,7 @@ typedef Playback* PlaybackPtr;
  * note)
  *
  * This is expressed as a multiple of a quarter note's value and is given as a
- * ratio between two integers, `num` and `den`. Thus, a quarter note has values
+ * ratio between two integers, num and den. Thus, a quarter note has values
  * num=1 and den=1, and a dotted quarter note has values num=3 and den=2, since
  * it is 1.5x the duration of a quarter note.
  */
@@ -60,9 +58,9 @@ struct Note
    *
    * A legato note has duration (gate) of 255/255.
    *
-   * @param div The value of the note, expressed as a `NoteDiv`
+   * @param div The value of the note, expressed as a NoteDiv
    * @param patch The pitch of the note
-   * @return The resulting `Note` struct
+   * @return The resulting Note struct
    */
   static constexpr Note Legato(const NoteDiv& div, const Pitch& pitch)
   {
@@ -74,9 +72,9 @@ struct Note
    *
    * A normal note has duration (gate) of 192/255.
    *
-   * @param div The value of the note, expressed as a `NoteDiv`
+   * @param div The value of the note, expressed as a NoteDiv
    * @param patch The pitch of the note
-   * @return The resulting `Note` struct
+   * @return The resulting Note struct
    */
   static constexpr Note Normal(const NoteDiv& div, const Pitch& pitch)
   {
@@ -88,8 +86,8 @@ struct Note
    *
    * A rest has duration (gate) of 0/255.
    *
-   * @param div The value of the rest, expressed as a `NoteDiv`
-   * @return The resulting `Note` struct
+   * @param div The value of the rest, expressed as a NoteDiv
+   * @return The resulting Note struct
    */
   static constexpr Note Rest(const NoteDiv& div)
   {
@@ -99,7 +97,7 @@ struct Note
   /**
    * Creates a special "end" note, which signifies the end of a sequence
    *
-   * @return The resulting `Note` struct
+   * @return The resulting Note struct
    */
   static constexpr Note End()
   {
@@ -107,7 +105,7 @@ struct Note
   }
 
   /**
-   * Checks if `Note` object is an "end" note. 
+   * Checks if Note object is an "end" note. 
    */
   bool IsEnd() { return div == kEndNote; }
 };
@@ -152,7 +150,7 @@ public:
    * Initializes object with given tempo and note sequence
    *
    * @param quarter_duration The durtion of a quarter note, in microseconds
-   * @param note A pointer to an array of `Note` structs. This array must end
+   * @param note A pointer to an array of Note structs. This array must end
    *             with an end note.
    */
   Playback(duration_t quarter_duration, Note* note);
@@ -160,48 +158,42 @@ public:
   /**
    * Gets the current value of the CV output signal
    *
-   * @return The current value of the CV output signal, in Volts
+   * @return The current value of the CV output signal, in mV
    */
   voltage_t Value();
 
   /**
-   * Gets a `SignalSource` object representing the CV output signal
+   * Gets a reference to the SignalSource for the CV output signal
    *
-   * This can be connected to a `SignalSink` object using a `Connection` object
-   *
-   * @return A reference to a `SignalSource` object representing the CV output
-   *         signal
+   * @return A reference to a SignalSource of the CV output signal
    */
   SignalSource& Output();
 
   /**
    * Gets the current value of the gate output signal
    *
-   * @return The current value of the gate signal, in Volts
+   * @return The current value of the gate signal, in mV
    */
   voltage_t GateValue();
 
   /**
-   * Gets a `SignalSource` object representing the gate output signal
+   * Gets a reference to the SignalSource for the gate output signal
    *
-   * This can be connected to a `SignalSink` object using a `Connection` object
-   *
-   * @return A reference to a `SignalSource` object representing the gate output
-   *         signal
+   * @return A reference to a SignalSource of the gate output signal
    */
   SignalSource& GateOutput();
 
   /**
-   * Called by run graph just before `StepTo`
+   * Called by run graph just before StepTo
    *
-   * @param timestamp The time stamp provided in the `StepTo` call
+   * @param timestamp The time stamp provided in the StepTo call
    */
   void StepToPre(timestamp_t timestamp);
 
   /**
-   * Called by run graph just after `StepTo`
+   * Called by run graph just after StepTo
    *
-   * @param timestamp The time stamp provided in the `StepTo` call
+   * @param timestamp The time stamp provided in the StepTo call
    */
   void StepToPost(timestamp_t timestamp);
 

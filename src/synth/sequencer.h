@@ -53,8 +53,8 @@ public:
    * @param step_period The duration of each step, in microseconds
    * @param duty The fraction of each step period for which the gate output is
    *             high
-   * @param slots A pointer to an array of `voltage_t` values
-   * @param num_slots The size of the `slots` array
+   * @param slots A pointer to an array of voltage_t values
+   * @param num_slots The size of the slots array
    */
   Sequencer(duration_t step_period, duty_t duty, voltage_t* slots, uint8_t num_slots);
 
@@ -65,7 +65,7 @@ public:
    * @param step_period The duration of each step, in microseconds
    * @param duty The fraction of each step period for which the gate output is
    *             high
-   * @param slot_func A function that returns a `voltage_t` for each slot index
+   * @param slot_func A function that returns a voltage_t for each slot index
    **                 (given as a uint8_t)
    * @param num_slots The number of slots to be used by the sequencer
    */
@@ -74,48 +74,42 @@ public:
   /**
    * Gets the current value of the CV output signal
    *
-   * @return The current value of the CV output signal, in Volts
+   * @return The current value of the CV output signal, in mV
    */
   voltage_t Value();
 
   /**
-   * Gets a `SignalSource` object representing the CV output signal
+   * Gets a reference to the SignalSource for the CV output signal
    *
-   * This can be connected to a `SignalSink` object using a `Connection` object
-   *
-   * @return A reference to a `SignalSource` object representing the CV output
-   *         signal
+   * @return A reference to a SignalSource of the CV output signal
    */
   SignalSource& Output();
 
   /**
    * Gets the current value of the gate output signal
    *
-   * @return The current value of the gate signal, in Volts
+   * @return The current value of the gate signal, in mV
    */
   voltage_t GateValue();
 
   /**
-   * Gets a `SignalSource` object representing the gate output signal
+   * Gets a reference to the SignalSource for the gate output signal
    *
-   * This can be connected to a `SignalSink` object using a `Connection` object
-   *
-   * @return A reference to a `SignalSource` object representing the gate output
-   *         signal
+   * @return A reference to a SignalSource of the gate output signal
    */
   SignalSource& GateOutput();
 
   /**
-   * Called by run graph just before `StepTo`
+   * Called by run graph just before StepTo
    *
-   * @param timestamp The time stamp provided in the `StepTo` call
+   * @param timestamp The time stamp provided in the StepTo call
    */
   void StepToPre(timestamp_t timestamp);
 
   /**
-   * Called by run graph just after `StepTo`
+   * Called by run graph just after StepTo
    *
-   * @param timestamp The time stamp provided in the `StepTo` call
+   * @param timestamp The time stamp provided in the StepTo call
    */
   void StepToPost(timestamp_t timestamp);
 

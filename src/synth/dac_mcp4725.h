@@ -31,7 +31,7 @@ public:
   /**
    * Sets the output voltage of the MCP4725 DAC
    *
-   * @param voltage Output value in Volts
+   * @param voltage Output value, in mV
    */
   virtual void SetVoltage(voltage_t voltage);
 

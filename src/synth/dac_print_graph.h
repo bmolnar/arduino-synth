@@ -21,20 +21,20 @@ public:
   static constexpr uint8_t kRightWidth = 8;
 
   /**
-   * Initializes object with `Print` object and flush duration
+   * Initializes object with Print object and flush duration
    *
-   * @param print A `Print` object where the output is sent to
-   * @param flush_period How often the `Print` object is flushed
+   * @param print A Print object where the output is sent to
+   * @param flush_period How often the Print object is flushed
    */
   DacPrintGraph(Print& print, duration_t sample_period=milliseconds(100));
 
   /**
-   * Initializes object with `Print` object, signal source, and flush duration
+   * Initializes object with Print object, signal source, and flush duration
    *
-   * @param print A `Print` object where the output is sent to
-   * @param source A `SignalSource` object that supplies the signal to this
+   * @param print A Print object where the output is sent to
+   * @param source A SignalSource object that supplies the signal to this
                    component
-   * @param flush_period How often the `Print` object is flushed
+   * @param flush_period How often the Print object is flushed
    */
   DacPrintGraph(Print& print, SignalSource& source, duration_t sample_period=milliseconds(100));
 
@@ -55,16 +55,16 @@ public:
   virtual void SetVoltage(voltage_t voltage);
 
   /**
-   * Called just before `StepTo` by run graph
+   * Called just before StepTo by run graph
    *
-   * @param timestamp The time stamp provided in the `StepTo` call
+   * @param timestamp The time stamp provided in the StepTo call
    */
   virtual void StepToPre(timestamp_t timestamp);
 
   /**
-   * Called just after `StepTo` by run graph
+   * Called just after StepTo by run graph
    *
-   * @param timestamp The time stamp provided in the `StepTo` call
+   * @param timestamp The time stamp provided in the StepTo call
    */
   virtual void StepToPost(timestamp_t timestamp);
 

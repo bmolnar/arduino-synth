@@ -5,21 +5,25 @@ namespace synth {
 Mixer::Mixer()
 {
 }
+
 Mixer::Mixer(SignalSource& input0)
 {
   input_[0].Connect(input0);
 }
+
 Mixer::Mixer(SignalSource& input0, SignalSource& input1)
 {
   input_[0].Connect(input0);
   input_[1].Connect(input1);
 }
+
 Mixer::Mixer(SignalSource& input0, SignalSource& input1, SignalSource& input2)
 {
   input_[0].Connect(input0);
   input_[1].Connect(input1);
   input_[2].Connect(input2);
 }
+
 Mixer::Mixer(SignalSource& input0, SignalSource& input1, SignalSource& input2, SignalSource& input3)
 {
   input_[0].Connect(input0);
@@ -27,6 +31,7 @@ Mixer::Mixer(SignalSource& input0, SignalSource& input1, SignalSource& input2, S
   input_[2].Connect(input2);
   input_[3].Connect(input3);
 }
+
 Mixer::Mixer(SignalSource& input0, SignalSource& input1, SignalSource& input2, SignalSource& input3,
              SignalSource& input4)
 {
@@ -36,6 +41,7 @@ Mixer::Mixer(SignalSource& input0, SignalSource& input1, SignalSource& input2, S
   input_[3].Connect(input3);
   input_[4].Connect(input4);
 }
+
 Mixer::Mixer(SignalSource& input0, SignalSource& input1, SignalSource& input2, SignalSource& input3,
              SignalSource& input4, SignalSource& input5)
 {
@@ -46,6 +52,7 @@ Mixer::Mixer(SignalSource& input0, SignalSource& input1, SignalSource& input2, S
   input_[4].Connect(input4);
   input_[5].Connect(input5);
 }
+
 Mixer::Mixer(SignalSource& input0, SignalSource& input1, SignalSource& input2, SignalSource& input3,
              SignalSource& input4, SignalSource& input5, SignalSource& input6)
 {
@@ -57,6 +64,7 @@ Mixer::Mixer(SignalSource& input0, SignalSource& input1, SignalSource& input2, S
   input_[5].Connect(input5);
   input_[6].Connect(input6);
 }
+
 Mixer::Mixer(SignalSource& input0, SignalSource& input1, SignalSource& input2, SignalSource& input3,
              SignalSource& input4, SignalSource& input5, SignalSource& input6, SignalSource& input7)
 {
@@ -69,6 +77,7 @@ Mixer::Mixer(SignalSource& input0, SignalSource& input1, SignalSource& input2, S
   input_[6].Connect(input6);
   input_[7].Connect(input7);
 }
+
 void Mixer::SetChannelInput(uint8_t channel, SignalSource& input)
 {
   input_[channel].Connect(input);
@@ -78,18 +87,7 @@ void Mixer::SetChannelGain(uint8_t channel, gain_t gain)
 {
   gain_[channel] = gain;
 }
-void Mixer::StepToPre(timestamp_t timestamp)
-{
-  for (uint8_t i = 0; i < kMaxChannels; ++i) {
-    if (input_[i].Connected()) {
-      input_[i].Source()->Owner().StepTo(timestamp);
-    }
-  }
-}
-void Mixer::StepToPost(timestamp_t timestamp)
-{
-  ((void) timestamp);
-}
+
 voltage_t Mixer::Value()
 {
   return static_cast<voltage_t>(
@@ -104,13 +102,29 @@ voltage_t Mixer::Value()
       (input_[7].Connected() ? (static_cast<int32_t>(gain_[7]) * static_cast<int32_t>(input_[7].GetValue())) : static_cast<int32_t>(0))
     ) / static_cast<int32_t>(kGainUnity));
 }
+
 SignalSink& Mixer::Input(uint8_t channel)
 {
   return input_[channel];
 }
+
 SignalSource& Mixer::Output()
 {
   return output_;
+}
+
+void Mixer::StepToPre(timestamp_t timestamp)
+{
+  for (uint8_t i = 0; i < kMaxChannels; ++i) {
+    if (input_[i].Connected()) {
+      input_[i].Source()->Owner().StepTo(timestamp);
+    }
+  }
+}
+
+void Mixer::StepToPost(timestamp_t timestamp)
+{
+  ((void) timestamp);
 }
 
 #if GRAPH_UTILS
@@ -124,6 +138,7 @@ uint8_t Mixer::GetNumChildren()
   }
   return result;
 }
+
 GraphObjectBasePtr Mixer::GetChild(uint8_t index)
 {
   return (index < kMaxChannels) ? &input_[index].Source()->Owner() : nullptr;

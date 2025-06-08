@@ -26,10 +26,10 @@ public:
 
   /**
    * Initializes digital out object tied to given board pin
-   * and connects a given `SignalSource` object
+   * and connects a given SignalSource object
    *
    * @param pin Pin number to be controlled by this object
-   * @param source The `SignalSource` object that provides input to this
+   * @param source The SignalSource object that provides input to this
    **              component
    */
   DigitalOut(int pin, SignalSource& source);
@@ -52,23 +52,23 @@ public:
   void SetVoltage(voltage_t voltage);
 
   /**
-   * Gets input as a `SignalSink` object
+   * Gets input as a SignalSink object
    *
-   * @return A reference to the input `SignalSink` object
+   * @return A reference to the input SignalSink object
    */
   SignalSink& Input();
 
   /**
-   * Called by run graph just before `StepTo`
+   * Called by run graph just before StepTo
    *
-   * @param timestamp The time stamp provided in the `StepTo` call
+   * @param timestamp The time stamp provided in the StepTo call
    */
   void StepToPre(timestamp_t timestamp);
 
   /**
-   * Called by run graph just after `StepTo`
+   * Called by run graph just after StepTo
    *
-   * @param timestamp The time stamp provided in the `StepTo` call
+   * @param timestamp The time stamp provided in the StepTo call
    */
   void StepToPost(timestamp_t timestamp);
 

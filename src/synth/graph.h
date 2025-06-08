@@ -7,9 +7,7 @@ namespace synth {
 
 #define GRAPH_UTILS 1
 
-//
 // Forward declarations
-//
 class Graph;
 typedef Graph* GraphPtr;
 
@@ -150,7 +148,7 @@ class SignalGetter
 public:
 
   /**
-   * Gets the current value of the signal, in Volts
+   * Gets the current value of the signal, in mV
    */
   virtual voltage_t Get() = 0;
 };
@@ -183,7 +181,7 @@ public:
   /**
    * Gets the current value of the output signal
    *
-   * @return The current value of the output signal, in Volts
+   * @return The current value of the output signal, in mV
    */
   voltage_t GetValue();
 
@@ -192,7 +190,7 @@ public:
    * to the given timestamp
    *
    * @param The timestamp to update the owning graph object to
-   * @return The current value of the output signal, in Volts
+   * @return The current value of the output signal, in mV
    */
   voltage_t Value(const timestamp_t& timestamp);
 
@@ -284,7 +282,7 @@ public:
    * If connected to a SignalSource, gets the current value of its output. If
    * not connected, returns default_voltage.
    *
-   * @return The current value (in Volts) of the output of the connected
+   * @return The current value (in mV) of the output of the connected
    *         SignalSource, or default_voltage if not connected
    */
   voltage_t GetValue();
@@ -295,7 +293,7 @@ public:
    * return default_voltage.
    *
    * @param The timestamp to update the peer's owning graph object to
-   * @return The current value (in Volts) of the output of the connected
+   * @return The current value (in mV) of the output of the connected
    *         SignalSource, or default_voltage if not connected
    */
   voltage_t Value(const timestamp_t& timestamp);
